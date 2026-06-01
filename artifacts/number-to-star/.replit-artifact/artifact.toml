@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Number to Star"
+version = "1.0.0"
+id = "artifacts/number-to-star"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 26243
+
+[services.development]
+run = "pnpm --filter @workspace/number-to-star run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/number-to-star", "run", "build" ]
+publicDir = "artifacts/number-to-star/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "26243"
+BASE_PATH = "/"
