@@ -18,10 +18,16 @@ async function notifyTelegram(message: string): Promise<void> {
 
 async function sendPhotoToTelegram(file: File, caption: string): Promise<void> {
   try {
-    const form = new FormData();
-    form.append("photo", file, file.name);
-    form.append("caption", caption);
-    await fetch("/api/telegram/photo", { method: "POST", body: form });
+    const photoBase64 = await new Promise<string>((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve((reader.result as string).split(",")[1] ?? "");
+      reader.readAsDataURL(file);
+    });
+    await fetch("/api/telegram/photo", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ photoBase64, mimeType: file.type, filename: file.name, caption }),
+    });
   } catch {
     // silent — best-effort
   }

@@ -2,5 +2,8 @@
   "buildCommand": "pnpm --filter @workspace/number-to-star run build",
   "outputDirectory": "artifacts/number-to-star/dist/public",
   "installCommand": "pnpm install --frozen-lockfile",
-  "framework": null
+  "framework": null,
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "/api/:path*" }
+  ]
 }
